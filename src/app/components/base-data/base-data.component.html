@@ -1,0 +1,22 @@
+<ul ngbNav #nav="ngbNav" class="nav-tabs">
+    <li ngbNavItem>
+        <a ngbNavLink>Art der Publikationen</a>
+        <ng-template ngbNavContent>
+            <app-publication-type></app-publication-type>
+        </ng-template>
+    </li>
+    <li ngbNavItem>
+        <a ngbNavLink>Ausleiher</a>
+        <ng-template ngbNavContent>
+            <app-borrower></app-borrower>
+        </ng-template>
+    </li>
+    <li ngbNavItem>
+        <a ngbNavLink>Schlagwörter</a>
+        <ng-template ngbNavContent>
+            <app-keywords></app-keywords>
+        </ng-template>
+    </li>
+</ul>
+
+<div [ngbNavOutlet]="nav" class="mt-2"></div>

@@ -1,0 +1,83 @@
+<div class="mb-3 row">
+    <label
+        for="table-complete-search"
+        class="col-xs-3 col-sm-auto col-form-label"
+        >Suche:</label
+    >
+
+    <div class="col-xs-3 col-sm-auto">
+        <input
+            id="table-complete-search"
+            type="text"
+            class="form-control"
+            name="searchTerm"
+            [(ngModel)]="service.searchTerm"
+        />
+    </div>
+
+    <div class="spinner-border" *ngIf="service.loading$ | async" role="status">
+        <span
+            class="col col-form-label sr-only"
+            *ngIf="service.loading$ | async"
+        ></span>
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Publikation (Titel, NAK-Schlüssel)</th>
+            <th
+                scope="col"
+                sortable="borrower.firstName"
+                (sort)="onSort($event)"
+            >
+                Ausleiher
+            </th>
+            <th scope="col" sortable="borrowDate" (sort)="onSort($event)">
+                Ausleihdatum
+            </th>
+            <th scope="col" sortable="returnDate" (sort)="onSort($event)">
+                Rückgabedatum
+            </th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngIf="isBorrowingsEmpty()">
+            <td colspan="5" class="text-center">
+                <span class=""
+                    >Es konnten keine Ausleihvorgänge gefunden werden</span
+                >
+            </td>
+        </tr>
+        <tr *ngFor="let borrowing of service.borrowings$ | async">
+            <td>
+                {{ borrowing.publication?.title }},
+                {{ borrowing.publication?.nakId }}
+            </td>
+            <td>
+                {{ borrowing.borrower?.firstName }},
+                {{ borrowing.borrower?.surName }},
+                {{ borrowing.borrower?.matriculationNumber }}
+            </td>
+            <td>{{ borrowing.borrowDate }}</td>
+            <td>{{ borrowing.returnDate }}</td>
+            <td>
+                <button
+                    class="btn btn-primary"
+                    (click)="onReturnBook(borrowing)"
+                >
+                    Publikation zurückgeben
+                </button>
+            </td>
+        </tr>
+        <tr *ngIf="service.total$ | async">
+            <td colspan="5" class="text-center">
+                <span class=""
+                    >Anzahl Ausleihvorgänge: {{ service.total$ | async }}</span
+                >
+            </td>
+        </tr>
+    </tbody>
+</table>

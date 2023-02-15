@@ -1,0 +1,29 @@
+<app-books-table
+    *ngIf="!currentBook"
+    [books]="books"
+    (add)="onAddBook()"
+    (edit)="onEditBook($event)"
+    (delete)="onDeleteBook($event)"
+    (borrow)="onBorrowBook($event)"
+    (detail)="onDetailBook($event)"
+></app-books-table>
+
+<app-books-form
+    *ngIf="currentBook && (mode === 'edit' || mode === 'create')"
+    [book]="currentBook"
+    (cancel)="onCancelBook()"
+    (submit)="onSaveBook()"
+></app-books-form>
+
+<app-book-borrow
+    *ngIf="currentBook && mode === 'borrow'"
+    [book]="currentBook"
+    (cancel)="onCancelBook()"
+    (submit)="onBorrowingBook($event)"
+></app-book-borrow>
+
+<app-book-detail
+    *ngIf="currentBook && mode === 'detail'"
+    [book]="currentBook"
+    (cancel)="onCancelBook()"
+></app-book-detail>

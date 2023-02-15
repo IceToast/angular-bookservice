@@ -1,0 +1,31 @@
+<h2>Publikation ausleihen</h2>
+<p>Ausleiher wählen</p>
+
+<form #form="ngForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <label for="borrower">Ausleiher*:</label>
+        <select
+            id="borrower"
+            name="borrower"
+            class="form-control"
+            [(ngModel)]="borrower"
+            required
+        >
+            <option
+                *ngFor="let borrower of borrowers$ | async"
+                [ngValue]="borrower"
+            >
+                {{ borrower.firstName }}, {{ borrower.surName }},
+                {{ borrower.matriculationNumber }}
+            </option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+        Ausleihen
+    </button>
+
+    <button type="button" class="btn btn-secondary" (click)="onCancel()">
+        Abbrechen
+    </button>
+</form>

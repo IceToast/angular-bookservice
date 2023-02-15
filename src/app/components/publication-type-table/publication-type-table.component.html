@@ -1,0 +1,84 @@
+<form>
+    <div class="mb-3 row">
+        <div class="col-xs-3 col-sm-auto">
+            <button class="btn btn-info text-white" (click)="onAdd()">
+                Publikationsart anlegen
+            </button>
+        </div>
+        <label
+            for="table-complete-search"
+            class="col-xs-3 col-sm-auto col-form-label"
+            >Suche:</label
+        >
+
+        <div class="col-xs-3 col-sm-auto">
+            <input
+                id="table-complete-search"
+                type="text"
+                class="form-control"
+                name="searchTerm"
+                [(ngModel)]="service.searchTerm"
+            />
+        </div>
+
+        <div
+            class="spinner-border"
+            *ngIf="service.loading$ | async"
+            role="status"
+        >
+            <span
+                class="col col-form-label sr-only"
+                *ngIf="service.loading$ | async"
+            ></span>
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col" sortable="id" (sort)="onSort($event)">Id</th>
+                <th scope="col" sortable="type" (sort)="onSort($event)">
+                    Art der Publikation
+                </th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="isPublicationTypesEmpty()">
+                <td colspan="3" class="text-center">
+                    <span class=""
+                        >Es konnten keine Publikationsarten gefunden
+                        werden</span
+                    >
+                </td>
+            </tr>
+
+            <tr *ngFor="let publicationType of publicationTypes">
+                <td>{{ publicationType.id }}</td>
+                <td>{{ publicationType.type }}</td>
+                <td>
+                    <button
+                        class="btn btn-primary"
+                        (click)="onEdit(publicationType)"
+                    >
+                        Bearbeiten
+                    </button>
+                    <button
+                        class="btn btn-danger"
+                        (click)="onDelete(publicationType)"
+                    >
+                        Löschen
+                    </button>
+                </td>
+            </tr>
+            <tr *ngIf="service.total$ | async">
+                <td colspan="3" class="text-center">
+                    <span class=""
+                        >Anzahl Publikationsarten:
+                        {{ service.total$ | async }}</span
+                    >
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>

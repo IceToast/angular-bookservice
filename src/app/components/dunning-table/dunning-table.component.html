@@ -1,0 +1,99 @@
+<div class="mb-3 row">
+    <label
+        for="table-complete-search"
+        class="col-xs-3 col-sm-auto col-form-label"
+        >Suche:</label
+    >
+
+    <div class="col-xs-3 col-sm-auto">
+        <input
+            id="table-complete-search"
+            type="text"
+            class="form-control"
+            name="searchTerm"
+            [(ngModel)]="dunningService.searchTerm"
+        />
+    </div>
+
+    <div
+        class="spinner-border"
+        *ngIf="dunningService.loading$ | async"
+        role="status"
+    >
+        <span
+            class="col col-form-label sr-only"
+            *ngIf="dunningService.loading$ | async"
+        ></span>
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Publikation (Titel, NAK-Schlüssel)</th>
+            <th scope="col" sortable="borrower" (sort)="onSort($event)">
+                Ausleiher
+            </th>
+            <th scope="col" sortable="borrowDate" (sort)="onSort($event)">
+                Ausleihdatum
+            </th>
+            <th scope="col" sortable="returnDate" (sort)="onSort($event)">
+                Rückgabedatum
+            </th>
+            <th scope="col" sortable="lastDunningDate" (sort)="onSort($event)">
+                Letzte Mahnung
+            </th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngIf="isDunningsEmpty()">
+            <td colspan="6" class="text-center">
+                <span class=""
+                    >Es konnten keine Mahnvorgänge gefunden werden</span
+                >
+            </td>
+        </tr>
+        <tr *ngFor="let dunning of dunningService.dunnings$ | async">
+            <td>
+                {{ dunning.borrowingProcess?.publication?.title }},
+                {{ dunning.borrowingProcess?.publication?.nakId }}
+            </td>
+            <td>
+                {{ dunning.borrowingProcess?.borrower?.firstName }},
+                {{ dunning.borrowingProcess?.borrower?.surName }},
+                {{ dunning.borrowingProcess?.borrower?.matriculationNumber }}
+            </td>
+            <td>{{ dunning.borrowingProcess?.borrowDate }}</td>
+            <td>{{ dunning.borrowingProcess?.returnDate }}</td>
+            <td>{{ dunning.lastDunningDate }}</td>
+            <td>
+                <button class="btn btn-primary" (click)="onReturnBook(dunning)">
+                    Publikation zurückgeben
+                </button>
+                <button
+                    class="btn btn-warning"
+                    [disabled]="hasThreeDunnings(dunning)"
+                    (click)="onDunning(dunning)"
+                >
+                    Abmahnen ({{ dunning.dunnings?.length }}/3)
+                </button>
+                <button
+                    class="btn btn-danger"
+                    [disabled]="!hasThreeDunnings(dunning)"
+                    (click)="onReportLoss(dunning)"
+                >
+                    Verlust melden
+                </button>
+            </td>
+        </tr>
+        <tr *ngIf="dunningService.total$ | async">
+            <td colspan="6" class="text-center">
+                <span class=""
+                    >Anzahl Mahnvorgänge:
+                    {{ dunningService.total$ | async }}</span
+                >
+            </td>
+        </tr>
+    </tbody>
+</table>

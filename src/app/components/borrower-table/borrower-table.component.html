@@ -1,0 +1,87 @@
+<form>
+    <div class="mb-3 row">
+        <div class="col-xs-3 col-sm-auto">
+            <button class="btn btn-info text-white" (click)="onAdd()">
+                Ausleiher anlegen
+            </button>
+        </div>
+        <label
+            for="table-complete-search"
+            class="col-xs-3 col-sm-auto col-form-label"
+            >Suche:</label
+        >
+
+        <div class="col-xs-3 col-sm-auto">
+            <input
+                id="table-complete-search"
+                type="text"
+                class="form-control"
+                name="searchTerm"
+                [(ngModel)]="service.searchTerm"
+            />
+        </div>
+
+        <div
+            class="spinner-border"
+            *ngIf="service.loading$ | async"
+            role="status"
+        >
+            <span
+                class="col col-form-label sr-only"
+                *ngIf="service.loading$ | async"
+            ></span>
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col" sortable="id" (sort)="onSort($event)">Id</th>
+                <th scope="col" sortable="firstName" (sort)="onSort($event)">
+                    Vorname
+                </th>
+                <th scope="col" sortable="surName" (sort)="onSort($event)">
+                    Nachname
+                </th>
+                <th
+                    scope="col"
+                    sortable="matriculationNumber"
+                    (sort)="onSort($event)"
+                >
+                    Matrikelnummer
+                </th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="isBorrowersEmpty()">
+                <td colspan="5" class="text-center">
+                    <span class=""
+                        >Es konnten keine Ausleiher gefunden werden</span
+                    >
+                </td>
+            </tr>
+            <tr *ngFor="let borrower of borrowers">
+                <td>{{ borrower.id }}</td>
+                <td>{{ borrower.firstName }}</td>
+                <td>{{ borrower.surName }}</td>
+                <td>{{ borrower.matriculationNumber }}</td>
+                <td>
+                    <button class="btn btn-primary" (click)="onEdit(borrower)">
+                        Bearbeiten
+                    </button>
+                    <button class="btn btn-danger" (click)="onDelete(borrower)">
+                        Löschen
+                    </button>
+                </td>
+            </tr>
+            <tr *ngIf="service.total$ | async">
+                <td colspan="5" class="text-center">
+                    <span class=""
+                        >Anzahl Ausleiher: {{ service.total$ | async }}</span
+                    >
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>

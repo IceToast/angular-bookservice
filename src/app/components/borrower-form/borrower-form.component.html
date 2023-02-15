@@ -1,0 +1,56 @@
+<h2>Anlegen oder Bearbeiten von Ausleiher</h2>
+<form #form="ngForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <label for="firstName">Vorname*:</label>
+        <input
+            type="text"
+            id="firstName"
+            name="firstName"
+            class="form-control"
+            [(ngModel)]="borrower.firstName"
+            required
+            pattern="[a-zA-Z ,.'-]*$"
+        />
+    </div>
+
+    <div class="form-group">
+        <label for="surName">Nachname*:</label>
+        <input
+            type="text"
+            id="surName"
+            name="surName"
+            class="form-control"
+            [(ngModel)]="borrower.surName"
+            required
+            pattern="[a-zA-Z ,.'-]*$"
+        />
+    </div>
+
+    <div class="form-group">
+        <label for="matriculationNumber">Matrikelnummer*:</label>
+        <input
+            type="number"
+            id="matriculationNumber"
+            name="matriculationNumber"
+            class="form-control"
+            [(ngModel)]="borrower.matriculationNumber"
+            required
+            pattern="[0-9]{1,10}"
+            title="Matrikelnummer muss aus 1 bis 10 Ziffern bestehen"
+            [ngClass]="{
+                'is-invalid': !isMatriculationNumberUnique(borrower)
+            }"
+        />
+    </div>
+
+    <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="form.invalid || !isMatriculationNumberUnique(borrower)"
+    >
+        Speichern
+    </button>
+    <button type="button" class="btn btn-secondary" (click)="onCancel()">
+        Abbrechen
+    </button>
+</form>

@@ -1,0 +1,141 @@
+<h2>{{ getTitle() }}</h2>
+<form #form="ngForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <div class="form-group">
+            <label for="title">NAK-Schlüssel*:</label>
+            <input
+                type="text"
+                id="nakId"
+                name="nakId"
+                class="form-control"
+                [(ngModel)]="book.nakId"
+                required
+                pattern="[a-zA-Z 1-9-]*"
+                [ngClass]="{
+                    'is-invalid': !isNakIdUnique(book)
+                }"
+            />
+        </div>
+        <div class="form-group">
+            <label for="title">Titel*:</label>
+            <input
+                type="text"
+                id="title"
+                name="title"
+                class="form-control"
+                [(ngModel)]="book.title"
+                required
+                pattern="[a-zA-Z 1-9][a-zA-Z 1-9;,. ]*"
+            />
+        </div>
+        <div class="form-group">
+            <label for="author">Autor*:</label>
+            <input
+                type="text"
+                id="author"
+                name="author"
+                class="form-control"
+                [(ngModel)]="book.authors"
+                required
+                pattern="[a-zA-Z][a-zA-Z , . ;]*[a-zA-Z]"
+            />
+        </div>
+        <div class="form-group">
+            <label for="isbn">ISBN:</label>
+            <input
+                type="text"
+                id="isbn"
+                name="isbn"
+                class="form-control"
+                [(ngModel)]="book.isbn"
+                pattern="^[0-9]+(-[0-9]+)*$"
+            />
+        </div>
+        <div class="form-group">
+            <label for="publisher">Verlag:</label>
+            <input
+                type="text"
+                id="publisher"
+                name="publisher"
+                class="form-control"
+                [(ngModel)]="book.publisher"
+                pattern="[a-zA-Z 1-9][a-zA-Z 1-9;,. ]*"
+            />
+        </div>
+        <div class="form-group">
+            <label for="releaseDate"
+                >Veröffentlichungsdatum*:
+                <span class="font-italic">(yyyy-MM-dd)</span></label
+            >
+            <input
+                type="text"
+                id="releaseDate"
+                name="releaseDate"
+                class="form-control"
+                [(ngModel)]="book.releaseDate"
+                required
+                pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+            />
+        </div>
+        <div class="form-group">
+            <label for="numberOfExemplars">Anzahl der Exemplare*:</label>
+            <input
+                id="amountInStock"
+                name="amountInStock"
+                class="form-control"
+                [(ngModel)]="book.amountInStock"
+                required
+                type="number"
+                [defaultValue]="1"
+                [min]="book.amountBorrowed || 1"
+            />
+        </div>
+        <div class="form-group">
+            <label for="publicationType">Art der Publikation*:</label>
+            <select
+                id="publicationType"
+                name="publicationType"
+                class="form-control"
+                [(ngModel)]="book.publicationType"
+                [compareWith]="compareByValue"
+                required
+            >
+                <option
+                    *ngFor="let publicationType of publicationTypes$ | async"
+                    [ngValue]="publicationType"
+                >
+                    {{ publicationType.type }}
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="keywords">Schlagwörter</label>
+            <select
+                id="keywords"
+                name="keywords"
+                class="form-control"
+                [(ngModel)]="book.keywords"
+                multiple
+            >
+                <option
+                    *ngFor="let keyword of keywords$ | async"
+                    [ngValue]="keyword"
+                    [value]="keyword"
+                    [ngClass]="{ selected: includesKeyword(keyword) }"
+                >
+                    {{ keyword.keyword }}
+                </option>
+            </select>
+        </div>
+    </div>
+    <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="form.invalid || !isNakIdUnique(book)"
+    >
+        Speichern
+    </button>
+    <button type="button" class="btn btn-secondary" (click)="onCancel()">
+        Abbruch
+    </button>
+</form>

@@ -1,0 +1,14 @@
+<app-keywords-table
+    *ngIf="!currentKeyword"
+    [keywords]="keywords"
+    (add)="onAddKeyword()"
+    (edit)="onEditKeyword($event)"
+    (delete)="onDeleteKeyword($event)"
+></app-keywords-table>
+
+<app-keywords-form
+    *ngIf="currentKeyword"
+    [keyword]="currentKeyword"
+    (cancel)="onCancelKeyword()"
+    (save)="onSaveKeyword()"
+></app-keywords-form>

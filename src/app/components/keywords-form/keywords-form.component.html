@@ -1,0 +1,31 @@
+<h2>Anlegen oder Bearbeiten von Schlagwörtern</h2>
+<form #form="ngForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <div class="form-group form-inline">
+            <label for="keyword">Name*:</label>
+            <input
+                type="text"
+                id="keyword"
+                name="keyword"
+                class="form-control"
+                [(ngModel)]="keyword.keyword"
+                required
+                [ngClass]="{
+                    'is-invalid': !service.isKeyWordUnique(keyword.keyword)
+                }"
+                pattern="[a-zA-Z1-9][a-zA-Z1-9 ]*"
+            />
+        </div>
+    </div>
+
+    <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="form.invalid || !service.isKeyWordUnique(keyword.keyword)"
+    >
+        Save
+    </button>
+    <button type="button" class="btn btn-secondary" (click)="onCancel()">
+        Cancel
+    </button>
+</form>

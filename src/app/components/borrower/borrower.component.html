@@ -1,0 +1,14 @@
+<app-borrower-table
+    *ngIf="!currentBorrower"
+    [borrowers]="borrowers"
+    (add)="onAddBorrower()"
+    (edit)="onEditBorrower($event)"
+    (delete)="onDeleteBorrower($event)"
+></app-borrower-table>
+
+<app-borrower-form
+    *ngIf="currentBorrower"
+    [borrower]="currentBorrower"
+    (cancel)="onCancelBorrower()"
+    (save)="onSaveBorrower()"
+></app-borrower-form>

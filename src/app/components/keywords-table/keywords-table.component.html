@@ -1,0 +1,75 @@
+<form>
+    <div class="mb-3 row">
+        <div class="col-xs-3 col-sm-auto">
+            <button class="btn btn-info text-white" (click)="onAdd()">
+                Schlagwort anlegen
+            </button>
+        </div>
+        <label
+            for="table-complete-search"
+            class="col-xs-3 col-sm-auto col-form-label"
+            >Suche:</label
+        >
+
+        <div class="col-xs-3 col-sm-auto">
+            <input
+                id="table-complete-search"
+                type="text"
+                class="form-control"
+                name="searchTerm"
+                [(ngModel)]="service.searchTerm"
+            />
+        </div>
+
+        <div
+            class="spinner-border"
+            *ngIf="service.loading$ | async"
+            role="status"
+        >
+            <span
+                class="col col-form-label sr-only"
+                *ngIf="service.loading$ | async"
+            ></span>
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col" sortable="id" (sort)="onSort($event)">Id</th>
+                <th scope="col" sortable="keyword" (sort)="onSort($event)">
+                    Schlagwort
+                </th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="isKeywordsEmpty()">
+                <td colspan="3" class="text-center">
+                    <span class=""
+                        >Es konnten keine Schlagwörter gefunden werden</span
+                    >
+                </td>
+            </tr>
+            <tr *ngFor="let keyword of keywords">
+                <td>{{ keyword.id }}</td>
+                <td>{{ keyword.keyword }}</td>
+                <td>
+                    <button class="btn btn-primary" (click)="onEdit(keyword)">
+                        Bearbeiten
+                    </button>
+                    <button class="btn btn-danger" (click)="onDelete(keyword)">
+                        Löschen
+                    </button>
+                </td>
+            </tr>
+            <tr *ngIf="service.total$ | async">
+                <td colspan="5" class="text-center">
+                    <span class=""
+                        >Anzahl Schlagwörter: {{ service.total$ | async }}</span
+                    >
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>

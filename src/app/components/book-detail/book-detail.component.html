@@ -1,0 +1,92 @@
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12 col-md-4 offset-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title text-center">Book Details</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 col md-4">
+                            <span class="font-weight-bold">Title:</span>
+                        </div>
+                        <div class="col-6 col md-8">
+                            <span>{{ book.title }}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 col md-4">
+                            <span class="font-weight-bold">Author:</span>
+                        </div>
+                        <div class="col-6 col md-8">
+                            <span>{{ book.authors }}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 col md-4">
+                            <span class="font-weight-bold">ISBN:</span>
+                        </div>
+                        <div class="col-6 col md-8">
+                            <span>{{ book.isbn || "-" }}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 col md-4">
+                            <span class="font-weight-bold">Verlag:</span>
+                        </div>
+                        <div class="col-6 col md-8">
+                            <span>{{ book.publisher }}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 col md-4">
+                            <span class="font-weight-bold"
+                                >Veröffentlichungsdatum:</span
+                            >
+                        </div>
+                        <div class="col-6 col md-8">
+                            <span>{{ book.releaseDate }}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 col md-4">
+                            <span class="font-weight-bold"
+                                >Art der Veröffentlichung:</span
+                            >
+                        </div>
+                        <div class="col-6 col md-8">
+                            <span>{{ book.publicationType.type }}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 col md-4">
+                            <span class="font-weight-bold"
+                                >Anzahl im Bestand:</span
+                            >
+                        </div>
+                        <div class="col-6 col md-8">
+                            <span>{{ book.amountInStock }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <app-borrowings-table
+                [borrowings]="borrowings"
+                (returnBook)="onReturnBook($event)"
+            ></app-borrowings-table>
+        </div>
+        <div class="col-md-12">
+            <button
+                class="btn btn-primary text-white float-right"
+                (click)="onCancelBook()"
+            >
+                Abbrechen
+            </button>
+        </div>
+    </div>
+</div>

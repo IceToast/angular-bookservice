@@ -1,0 +1,28 @@
+<ul ngbNav #nav="ngbNav" class="nav-tabs">
+    <li ngbNavItem>
+        <a ngbNavLink>Publikationsverwaltung</a>
+        <ng-template ngbNavContent>
+            <app-books></app-books>
+        </ng-template>
+    </li>
+    <li ngbNavItem>
+        <a ngbNavLink>Ausleihvorgänge</a>
+        <ng-template ngbNavContent>
+            <app-borrowings></app-borrowings>
+        </ng-template>
+    </li>
+    <li ngbNavItem>
+        <a ngbNavLink>Mahnwesen</a>
+        <ng-template ngbNavContent>
+            <app-dunning></app-dunning>
+        </ng-template>
+    </li>
+    <li ngbNavItem>
+        <a ngbNavLink>Stammdatenverwaltung</a>
+        <ng-template ngbNavContent>
+            <app-base-data></app-base-data>
+        </ng-template>
+    </li>
+</ul>
+
+<div [ngbNavOutlet]="nav" class="mt-2"></div>

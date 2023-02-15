@@ -1,0 +1,14 @@
+<app-publication-type-table
+    *ngIf="!currentPublicationType"
+    [publicationTypes]="publicationTypes"
+    (add)="onAddPublicationType()"
+    (edit)="onEditPublicationType($event)"
+    (delete)="onDeletePublicationType($event)"
+></app-publication-type-table>
+
+<app-publication-type-form
+    *ngIf="currentPublicationType"
+    [publicationType]="currentPublicationType"
+    (cancel)="onCancelPublicationType()"
+    (save)="onSavePublicationType()"
+></app-publication-type-form>

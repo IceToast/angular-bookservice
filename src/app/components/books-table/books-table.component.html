@@ -1,0 +1,160 @@
+<form>
+    <div class="mb-3 row">
+        <div class="col-xs-3 col-sm-auto">
+            <button class="btn btn-info text-white" (click)="onAdd()">
+                Publikation anlegen
+            </button>
+        </div>
+        <label
+            for="table-complete-search"
+            class="col-xs-3 col-sm-auto col-form-label"
+            >Publikationssuche:</label
+        >
+
+        <div class="col-xs-3 col-sm-auto">
+            <input
+                id="table-complete-search"
+                type="text"
+                class="form-control"
+                name="searchTerm"
+                [(ngModel)]="service.searchTerm"
+            />
+        </div>
+        <div class="col-xs-3 col-sm-auto">
+            <div class="form-check">
+                <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="borrowable"
+                    name="borrowable"
+                    [(ngModel)]="borrowable"
+                    (ngModelChange)="onBorrowableChange()"
+                />
+                <label class="form-check-label" for="borrowable"
+                    >Nur ausleihbare Publikationen</label
+                >
+            </div>
+        </div>
+        <div
+            class="spinner-border"
+            *ngIf="service.loading$ | async"
+            role="status"
+        >
+            <span
+                class="col col-form-label sr-only"
+                *ngIf="service.loading$ | async"
+            ></span>
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col" sortable="id" (sort)="onSort($event)">Id</th>
+                <th scope="col" sortable="nakId" (sort)="onSort($event)">
+                    NAK-Schlüssel
+                </th>
+                <th scope="col" sortable="title" (sort)="onSort($event)">
+                    Titel
+                </th>
+                <th scope="col" sortable="authors" (sort)="onSort($event)">
+                    Autor(en)
+                </th>
+                <th scope="col" sortable="releaseDate" (sort)="onSort($event)">
+                    Veröffentlichungsdatum
+                </th>
+                <th
+                    scope="col"
+                    sortable="amountInStock"
+                    (sort)="onSort($event)"
+                >
+                    Anzahl im Bestand
+                </th>
+                <th
+                    scope="col"
+                    sortable="amountBorrowed"
+                    (sort)="onSort($event)"
+                >
+                    Ausgeliehen
+                </th>
+                <th scope="col" sortable="publisher" (sort)="onSort($event)">
+                    Verlag
+                </th>
+                <th scope="col" sortable="isbn" (sort)="onSort($event)">
+                    ISBN
+                </th>
+                <th
+                    scope="col"
+                    sortable="publicationType"
+                    (sort)="onSort($event)"
+                >
+                    Art der Veröffentlichung
+                </th>
+                <th scope="col" sortable="keywords" (sort)="onSort($event)">
+                    Schlagwörter
+                </th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="isBooksEmpty()">
+                <td colspan="12" class="text-center">
+                    <span class=""
+                        >Es konnten keine Publikationen gefunden werden</span
+                    >
+                </td>
+            </tr>
+
+            <tr *ngFor="let book of service.books$ | async">
+                <td>{{ book.id }}</td>
+                <td>{{ book.nakId }}</td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.authors?.split(";")?.join(", ") }}</td>
+                <td>{{ book.releaseDate }}</td>
+                <td>{{ book.amountInStock }}</td>
+                <td>{{ book.amountBorrowed }}</td>
+                <td>{{ book.publisher }}</td>
+                <td>{{ book.isbn }}</td>
+                <td>{{ book.publicationType?.type }}</td>
+                <td>
+                    <span *ngFor="let keyword of book.keywords"
+                        >{{ keyword.keyword }},
+                    </span>
+                </td>
+                <td>
+                    <button
+                        class="btn btn-info text-white"
+                        (click)="onDetail(book)"
+                    >
+                        Details
+                    </button>
+                    <button
+                        class="btn btn-primary"
+                        [disabled]="!isBorrowable(book)"
+                        (click)="onBorrow(book)"
+                    >
+                        Ausleihen
+                    </button>
+                    <button class="btn btn-primary" (click)="onEdit(book)">
+                        Bearbeiten
+                    </button>
+                    <button
+                        class="btn btn-danger"
+                        [disabled]="book.amountBorrowed !== 0"
+                        (click)="onDelete(book)"
+                    >
+                        Löschen
+                    </button>
+                </td>
+            </tr>
+            <tr *ngIf="service.total$ | async">
+                <td colspan="12" class="text-center">
+                    <span class=""
+                        >Anzahl Publikationen:
+                        {{ service.total$ | async }}</span
+                    >
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
